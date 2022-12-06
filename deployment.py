@@ -1,15 +1,21 @@
+'''----- code from: https://neptune.ai/blog/how-to-implement-customer-churn-prediction ------'''
+
 #Import libraries
 import streamlit as st
 import pandas as pd
 import numpy as np
+import pickle
 from PIL import Image
 
 #load the model from disk
-import joblib
-# model = joblib.load(r"./notebook/model.sav")
+
+# load saved model
+
+with open('model.pkl' , 'rb') as f:
+    model = pickle.load(f)
 
 #Import python scripts
-#from preprocessing import preprocess
+from preprocessor import preprocess
 
 def main():
     #Setting Application title
@@ -77,9 +83,9 @@ def main():
         st.markdown("<h3></h3>", unsafe_allow_html=True)
         st.dataframe(features_df)
         #Preprocess inputs
-        # preprocess_df = preprocess(features_df, 'Online')
+        preprocess_df = preprocess(features_df, 'Online')
 
-        #prediction = model.predict(preprocess_df)
+        prediction = model.predict(preprocess_df)
 
         if st.button('Predict'):
             if prediction == 1:
@@ -97,7 +103,7 @@ def main():
             st.write(data.head())
             st.markdown("<h3></h3>", unsafe_allow_html=True)
             #Preprocess inputs
-            #preprocess_df = preprocess(data, "Batch")
+            preprocess_df = preprocess(data, "Batch")
             if st.button('Predict'):
                 #Get batch prediction
                 prediction = model.predict(preprocess_df)
