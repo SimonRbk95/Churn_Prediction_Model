@@ -1,4 +1,4 @@
-'''----- code from: https://neptune.ai/blog/how-to-implement-customer-churn-prediction ------'''
+'''----- modified code inspired by: https://neptune.ai/blog/how-to-implement-customer-churn-prediction ------'''
 
 #Import libraries
 import streamlit as st
@@ -19,12 +19,12 @@ from preprocessor import preprocess
 
 def main():
     #Setting Application title
-    st.title('Telco Customer Churn Prediction App')
+    st.title('Employee Attrition')
 
       #Setting Application description
     st.markdown("""
-     :dart:  This Streamlit app is made to predict customer churn in a ficitional telecommunication use case.
-    The application is functional for both online prediction and batch data prediction. n
+     :dart:  This Streamlit app is made to predict employee's attrition in an HR use case based on real company data.
+    The application is functional for both online prediction and batch data prediction.
     """)
     st.markdown("<h3></h3>", unsafe_allow_html=True)
 
@@ -32,66 +32,62 @@ def main():
     image = Image.open('App.jpg')
     add_selectbox = st.sidebar.selectbox(
     "How would you like to predict?", ("Online", "Batch"))
-    st.sidebar.info('This app is created to predict Customer Churn')
+    st.sidebar.info('This app is created to predict Employee Attrition')
     st.sidebar.image(image)
 
     if add_selectbox == "Online":
         st.info("Input data below")
         #Based on our optimal features selection
-        st.subheader("Demographic data")
-        seniorcitizen = st.selectbox('Senior Citizen:', ('Yes', 'No'))
-        dependents = st.selectbox('Dependent:', ('Yes', 'No'))
-        st.subheader("Payment data")
-        tenure = st.slider('Number of months the customer has stayed with the company', min_value=0, max_value=72, value=0)
-        contract = st.selectbox('Contract', ('Month-to-month', 'One year', 'Two year'))
-        paperlessbilling = st.selectbox('Paperless Billing', ('Yes', 'No'))
-        PaymentMethod = st.selectbox('PaymentMethod',('Electronic check', 'Mailed check', 'Bank transfer (automatic)','Credit card (automatic)'))
-        monthlycharges = st.number_input('The amount charged to the customer monthly', min_value=0, max_value=150, value=0)
-        totalcharges = st.number_input('The total amount charged to the customer',min_value=0, max_value=10000, value=0)
+        #st.subheader("Personal Data")
+        MartialStatus= st.selectbox('Martial Status:', ('Single', 'Married', 'Divorced'))
+        Jobinvolvement = st.number_input('How involved are you in your current job?', min_value=1, max_value=4, value=1)
+        OverTime = st.selectbox('Have you worked overtime?', ('Yes', 'No'))
+        NumCompaniesWorked = st.number_input('How many companies have you worked for?', min_value=1, max_value=100, value=1)
+        TotalWorkingYears = st.number_input('How many years have you worked XYZ Ltd.?', min_value=0, max_value=100, value=1)
+        YearsInCurrentRole = st.number_input('How many years have you worked in your current role at XYZ Ltd.?', min_value=0, max_value=100, value=1)
+        YearsSinceLastPromotion = st.number_input('How many years have passed since your last promotion', min_value=0, max_value=150, value=0)
+        BusinessTravel = st.selectbox('How often do you travel in your current role?', ('None', 'Rarely', 'Frequently'))
+        DistanceFromHome = st.number_input('How far you have to travel to get to work? (in km)', min_value=0, max_value=1000, value=0)
+        JobRole = st.selectbox("What is your current job role?", ('Sales Executive', 'Research Scientist',
+                                                                 'Laboratory Technician', 'Manufacturing Director', 
+                                                                 'Healthcare Representative', 'Sales Representative', 
+                                                                 'Manager', 'Sales Executive'))
+        Environmentsatisfaction = st.number_input('How satisfied are you with the work environment?', min_value=1, max_value=4, value=1)
+        JobSatisfaction = st.number_input('How satisfied are you with your job?', min_value=1, max_value=4, value=1)
 
-        st.subheader("Services signed up for")
-        mutliplelines = st.selectbox("Does the customer have multiple lines",('Yes','No','No phone service'))
-        phoneservice = st.selectbox('Phone Service:', ('Yes', 'No'))
-        internetservice = st.selectbox("Does the customer have internet service", ('DSL', 'Fiber optic', 'No'))
-        onlinesecurity = st.selectbox("Does the customer have online security",('Yes','No','No internet service'))
-        onlinebackup = st.selectbox("Does the customer have online backup",('Yes','No','No internet service'))
-        techsupport = st.selectbox("Does the customer have technology support", ('Yes','No','No internet service'))
-        streamingtv = st.selectbox("Does the customer stream TV", ('Yes','No','No internet service'))
-        streamingmovies = st.selectbox("Does the customer stream movies", ('Yes','No','No internet service'))
 
-        data = {
-                'SeniorCitizen': seniorcitizen,
-                'Dependents': dependents,
-                'tenure':tenure,
-                'PhoneService': phoneservice,
-                'MultipleLines': mutliplelines,
-                'InternetService': internetservice,
-                'OnlineSecurity': onlinesecurity,
-                'OnlineBackup': onlinebackup,
-                'TechSupport': techsupport,
-                'StreamingTV': streamingtv,
-                'StreamingMovies': streamingmovies,
-                'Contract': contract,
-                'PaperlessBilling': paperlessbilling,
-                'PaymentMethod':PaymentMethod,
-                'MonthlyCharges': monthlycharges,
-                'TotalCharges': totalcharges
-                }
+
+        data={
+                'EnvironmentSatisfaction' : Environmentsatisfaction,
+                'JobInvolvement' : Jobinvolvement,
+                'OverTime' : OverTime,
+                'NumCompaniesWorked' : NumCompaniesWorked,
+                'TotalWorkingYears' : TotalWorkingYears,
+                'YearsInCurrentRole' : YearsInCurrentRole,
+                'YearsSinceLastPromotion' : YearsSinceLastPromotion,
+                'MartialStatus' : MartialStatus,
+                'BusinessTravel' : BusinessTravel,
+                'JobRole' : JobRole,
+                'JobSatisfaction': JobSatisfaction,
+                'DistanceFromHome' : DistanceFromHome,
+        }
+
+
         features_df = pd.DataFrame.from_dict([data])
         st.markdown("<h3></h3>", unsafe_allow_html=True)
         st.write('Overview of input is shown below')
         st.markdown("<h3></h3>", unsafe_allow_html=True)
         st.dataframe(features_df)
         #Preprocess inputs
-        preprocess_df = preprocess(features_df, 'Online')
-
-        prediction = model.predict(preprocess_df)
+        
 
         if st.button('Predict'):
+            to_predict = preprocess(features_df, 'Online')
+            prediction = model.predict(to_predict)
             if prediction == 1:
-                st.warning('Yes, the customer will terminate the service.')
+                st.warning('Yes, the employee will leave the company.')
             else:
-                st.success('No, the customer is happy with Telco Services.')
+                st.success('No, the employee will not leave the company.')
 
 
     else:
@@ -103,13 +99,13 @@ def main():
             st.write(data.head())
             st.markdown("<h3></h3>", unsafe_allow_html=True)
             #Preprocess inputs
-            preprocess_df = preprocess(data, "Batch")
+            topredict_list= preprocess(data, "Batch")
             if st.button('Predict'):
                 #Get batch prediction
-                prediction = model.predict(preprocess_df)
+                prediction = model.predict(topredict_list)
                 prediction_df = pd.DataFrame(prediction, columns=["Predictions"])
-                prediction_df = prediction_df.replace({1:'Yes, the customer will terminate the service.',
-                                                    0:'No, the customer is happy with Telco Services.'})
+                prediction_df = prediction_df.replace({1:'Yes, the employee will leave the company.',
+                                                    0:'No, the employee will not leave the company.'})
 
                 st.markdown("<h3></h3>", unsafe_allow_html=True)
                 st.subheader('Prediction')
