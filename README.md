@@ -1,5 +1,5 @@
 # Data Science for Business
-### University of Amsterdam Core Course (Grade 9.1)
+### University of Amsterdam Core Course (Project Grade 9.1)
 
 #### File DS_New provides the main project of prediction employee churn, including:
 <li>Data Cleaning & Preprocessing
