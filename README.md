@@ -1,5 +1,5 @@
 # Data Science for Business (Project Grade 9.1)
-### University of Amsterdam 
+## University of Amsterdam 
 
 #### Notebook DS_Project_New provides the final implementation of the model predicting employee churn. 
 
