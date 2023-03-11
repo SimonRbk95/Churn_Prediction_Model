@@ -3,6 +3,7 @@
 
 #### Notebook DS_Project_New provides the final implementation of the model predicting employee churn. 
 
+<ul>
 <li>Data Cleaning & Preprocessing
 <li>Exploratory Data Analysis
 <li>Predictive Modeling incl. Logistic Regression, Support Vector Machine, Decision Tree, and Random Forest
